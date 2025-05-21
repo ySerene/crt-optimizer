@@ -26,9 +26,6 @@ def extended_gcd(a, b):
         y0, y1 = y1, y0 - q * y1
     return a, x0, y0
 
-
-def modinv(a, m):
-    return pow(a, -1, m)
 def modinv(a, m):
     g, x, _ = extended_gcd(a, m)
     if g != 1:
