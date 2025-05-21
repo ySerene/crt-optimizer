@@ -149,10 +149,8 @@ def crt_iterative_parallel(a_list, m_list, max_workers=None):
             if right is None:
                 return left
             return crt_merge_pair(left[0], left[1], right[0], right[1])
-
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             results = list(executor.map(merge_task, pairs))
-
         # 解包结果
         a, m = zip(*results)
         a = list(a)
