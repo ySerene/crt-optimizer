@@ -67,32 +67,30 @@ def crt_merge_pair(a1, m1, a2, m2):
 
 
 
-def crt_iterative(a_list, m_list):
-    """使用迭代方式合并多个模方程"""
-    assert len(a_list) == len(m_list)
-    a = a_list[:]
-    m = m_list[:]
+def crt_iterative(a, m):
+    assert len(a) == len(m)
     n = len(a)
+    a = a[:]
+    m = m[:]
 
     while n > 1:
         new_a = []
         new_m = []
-        for i in range(0, n, 2):
-            if i + 1 == n:
-                # 奇数个，最后一个直接加入
-                new_a.append(a[i])
-                new_m.append(m[i])
-            else:
-                try:
-                    merged_a, merged_m = crt_merge_pair(a[i], m[i], a[i+1], m[i+1])
-                    new_a.append(merged_a)
-                    new_m.append(merged_m)
-                except ValueError:
-                    raise ValueError(f"Cannot merge {a[i]} mod {m[i]} and {a[i+1]} mod {m[i+1]}")
+        i = 0
+        while i + 1 < n:
+            a1, m1 = a[i], m[i]
+            a2, m2 = a[i+1], m[i+1]
+            inv = pow(m1, -1, m2)
+            x = ((a2 - a1) * inv) % m2
+            new_a.append((a1 + x * m1) % (m1 * m2))
+            new_m.append(m1 * m2)
+            i += 2
+        if i < n:
+            new_a.append(a[i])
+            new_m.append(m[i])
         a, m = new_a, new_m
         n = len(a)
-
-    return a[0]  # 最终合并结果
+    return a[0]
 
 
 def is_pairwise_coprime(moduli):
